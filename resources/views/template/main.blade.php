@@ -22,6 +22,8 @@
 	<title>{{ $content }} | Silat</title>
 
 	<link href="{{ url('bs/css/app.css') }}" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -69,8 +71,7 @@
 		</div>
 	</div>
 
-	
-	<script src="{{ url('bs/js/app.js') }}"></script>
+		<script src="{{ url('bs/js/app.js') }}"></script>
 	<script src="{{ url('js/main.js') }}"></script>
 	{{-- Data Tables JS --}}
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>

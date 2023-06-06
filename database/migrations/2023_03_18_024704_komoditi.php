@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('komoditi', function (Blueprint $table) {
             $table->id();
+            $table->string('npwp_pengusaha');
+            $table->string('empat_digit_hs');
+            $table->string('komoditi');
+            $table->integer('skor');
+            $table->string('level');
             $table->timestamps();
         });
     }

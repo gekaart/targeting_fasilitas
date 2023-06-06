@@ -1,0 +1,25 @@
+jadi di aplikasi ini kita diminta untuk membuat sistem aplikasi targeting fasilitas.
+
+aplikasi ini akan melakukan scoring dari data yang telah disiapkan.
+
+yang harus dilakukan scoring:
+- komiditi
+- pemasok
+- tonase
+- cif
+
+levelnya:
+- prioritas (1)
+- low (2)
+- med (3)
+- hight (4)
+- very hight (5)
+
+dari scoring tersebut akan menentukan level dari perusahaan penerima fasilitas.
+
+KOMODITI
+
+
+
+
+

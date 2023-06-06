@@ -20,9 +20,9 @@
                     <i class="align-middle" data-feather="clipboard"></i> <span class="align-middle">Skoring</span>
                 </a>
             </li>
-            <li class="sidebar-item {{ (request()->is('kawasan_berikat*')) ? 'active' : '' }}">
-                <a class="sidebar-link" href="{{ url('/kawasan_berikat') }}">
-                    <i class="align-middle" data-feather="hexagon"></i> <span class="align-middle">Kawasan Berikat</span>
+            <li class="sidebar-item {{ (request()->is('gudang_berikat*')) ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ url('/gudang_berikat') }}">
+                    <i class="align-middle" data-feather="hexagon"></i> <span class="align-middle">Gudang Berikat</span>
                 </a>
             </li>
             <li class="sidebar-item {{ (request()->is('users*')) ? 'active' : '' }}">

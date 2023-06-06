@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ScoreController;
+use App\Http\Controllers\GudangBerikatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +26,12 @@ Route::get('/', function () {
     return view('dashboard', ['content' => 'Dashboard']);
 })->middleware('auth');
 
-// Route::get('/scoring', ScoreController::class)->middleware('auth');
-// Route::get('/scoring/{npwp}', [ScoreController::class, 'show'])->middleware('auth');
-// Route::post('/scoring/store', [ScoreController::class, 'store'])->middleware('auth');
-Route::controller(ScoreController::class)->group(function () {
-    Route::get('/scoring', 'index')->name('scoring_list');
-    Route::get('/scoring/{npwp}', 'show')->name('scoring_show');
-    Route::post('/scoring/store/{npwp}', 'store')->name('scoring_store');
-})->middleware('auth');
+// Route menu scoring
+Route::get('/scoring', [ScoreController::class, 'index'])->middleware('auth');
+Route::get('/scoring/{npwp}', [ScoreController::class, 'show'])->middleware('auth');
+Route::post('/scoring/store/{npwp}', [ScoreController::class, 'store'])->middleware('auth');
+Route::put('/scoring/update/{npwp}', [ScoreController::class, 'update'])->middleware('auth');
+
+// Route menu gudang berikat
+Route::get('/gudang_berikat', [GudangBerikatController::class, 'index'])->middleware('auth');
+Route::get('/gudang_berikat/edit/{npwp}', [GudangBerikatController::class, 'edit'])->middleware('auth');
