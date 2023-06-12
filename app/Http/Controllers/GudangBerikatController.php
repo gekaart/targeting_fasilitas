@@ -19,7 +19,7 @@ class GudangBerikatController extends Controller
         return view('gudang_berikat', $data);
     }
 
-    public function edit($npwp)
+    public function edit_komoditi($npwp)
     {
         $data_awal = DataAwal::where('id_pengusaha', $npwp)->get();
         $data = [
@@ -34,6 +34,6 @@ class GudangBerikatController extends Controller
             // 'tonase' => DataAwal::where('id_pengusaha', $npwp)->sum('netto'),
             // 'cif' => DataAwal::where('id_pengusaha', $npwp)->sum('cif')
         ];
-        return view('scoring', $data);
+        return view('scoring/komoditi', $data);
     }
 }

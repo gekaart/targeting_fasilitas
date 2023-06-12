@@ -86,6 +86,7 @@
                                     @endif
                                 </table>
                             </div>
+                            
                                 @if ($scoring == 'yes')
                                     <form action="{{ url('/scoring/update/'.$npwp) }}" method="post">
                                         @method('put')
@@ -193,6 +194,7 @@
                                                             </div>
                                                             </div>
                                                         </div>
+                                                        
                                                         
                                                     @endforeach
             

@@ -78,7 +78,7 @@
                                         <td>{{ $gb->status }}</td>
                                         <td>
                                             <a href="{{ url('gudang_berikat/detail/'.$gb->npwp_pengusaha) }}" title="detail"><i class="align-middle text-primary" data-feather="search"></i></a>
-                                            <a href="{{ url('gudang_berikat/edit/'.$gb->npwp_pengusaha) }}" title="edit"><i class="align-middle text-warning" data-feather="edit"></i></a>
+                                            <a href="{{ url('gudang_berikat/komoditi/'.$gb->npwp_pengusaha) }}" title="edit"><i class="align-middle text-warning" data-feather="edit"></i></a>
                                         </td>
                                     </tr>
                                     @php

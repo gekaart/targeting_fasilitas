@@ -26,10 +26,10 @@ class ScoreController extends Controller
             'perusahaan' => DataAwal::all()->where('KD', 0)->unique('ID_PENGUSAHA')
         ];
 
-        return view('scoring', $data);
+        return view('scoring/index', $data);
     }
 
-    public function show($npwp)
+    public function komoditi($npwp)
     {
         // melakukan pengecekan apakah data perusahaan sudah pernah dilakukan skoring
         $count_scoring = GudangBerikat::all()->where('npwp_pengusaha', $npwp)->count();
@@ -45,9 +45,8 @@ class ScoreController extends Controller
                 'pengusaha' => $data_awal->first(),
                 'data_komoditi' => $data_awal->unique('HS_CODE'),
                 'select_hs4' => Komoditi::latest(),
-                // 'data_pemasok' => DataAwal::where('id_pengusaha', $npwp)->get()->unique('NAMA_PEMASOK'),
-                // 'tonase' => DataAwal::where('id_pengusaha', $npwp)->sum('netto'),
-                // 'cif' => DataAwal::where('id_pengusaha', $npwp)->sum('cif')
+                'komoditi_all' => Komoditi::all(),
+                'uraian_all' => DataAwal::where('KD', 1)->get()->unique('UR_BRG'),
             ];
         } else {
             // dd(Komoditi::OrderBy('id', 'desc')->where('empat_digit_hs', '2710')->first());
@@ -60,36 +59,61 @@ class ScoreController extends Controller
                 'data_komoditi' => $data_awal->unique('HS_CODE'),
                 'select_hs4' => Komoditi::latest(),
                 'status_gb' => GudangBerikat::where('npwp_pengusaha', $npwp)->pluck('status'),
-                // 'data_pemasok' => DataAwal::where('id_pengusaha', $npwp)->get()->unique('NAMA_PEMASOK'),
-                // 'tonase' => DataAwal::where('id_pengusaha', $npwp)->sum('netto'),
-                // 'cif' => DataAwal::where('id_pengusaha', $npwp)->sum('cif')
+                'komoditi_all' => Komoditi::all(),
+                'uraian_all' => DataAwal::where('KD', 1)->get()->unique('UR_BRG'),
             ];
         }
         // $sum = DataAwal::where('id_pengusaha', $npwp)->sum('netto');
-        // dd($sum);
-        return view('scoring', $data);
+        return view('scoring/komoditi', $data);
+    }
+
+    public function pemasok($npwp)
+    {
+        $data_awal = DataAwal::where('id_pengusaha', $npwp)->get();
+        $data = [
+            'content' => 'Skoring Penerima Fasilitas',
+            'scoring' => 'no',
+            'npwp' => $npwp,
+            'pengusaha' => $data_awal->first(),
+        ];
+        return view('scoring/pemasok', $data);
+    }
+
+    public function tonaseCIF($npwp)
+    {
+        $data_awal = DataAwal::where('id_pengusaha', $npwp)->get();
+        $data = [
+            'content' => 'Skoring Penerima Fasilitas',
+            'scoring' => 'no',
+            'npwp' => $npwp,
+            'pengusaha' => $data_awal->first(),
+        ];
+        return view('scoring/tonaseCIF', $data);
     }
 
 
 
-    public function store(Request $request, $npwp)
+    public function store_komoditi(Request $request, $npwp)
     {
-        // PROSES DATA KOMODITAS
+        // PROSES MENYIMPAN DATA KOMODITAS
         $array_no = 0;
         // input skor komoditi ke db komoditi untuk setiap hs4 komoditas
         foreach ($request->hs4_komo as $hs4) {
             // menentukan skore dari level
             $skor = $request['sk_komo'][$array_no];
             $level = $this->level_skor($skor);
+            $nama_pengusaha = $request->nama_pengusaha;
 
             // tambah data komoditi ke database komoditi
-            Komoditi::create([
+            $komoditi = Komoditi::create([
                 'npwp_pengusaha' => $npwp,
+                'nama_pengusaha' => $nama_pengusaha,
                 'empat_digit_hs' => explode(" - ", $hs4)[0],
                 'komoditi' => explode(" - ", $hs4)[1],
                 'skor' => $skor,
                 'level' => $level,
             ]);
+            // dd($komoditi);
             $array_no++;
         }
         // Hitung rata2 skor komoditi
@@ -103,7 +127,7 @@ class ScoreController extends Controller
         // Input data hasil perhitungan pada tabel gudang berikat
         GudangBerikat::create([
             'npwp_pengusaha' => $npwp,
-            'nama_pengusaha' => DataAwal::where('id_pengusaha', $npwp)->value('NAMA_PENGUSAHA'),
+            'nama_pengusaha' => $nama_pengusaha,
             'komoditi' => $avg_komo,
             'pemasok' => rand(1, 5),
             'tonase' => rand(1, 5),
@@ -116,89 +140,9 @@ class ScoreController extends Controller
         // Update kolom KD pada tabel data awal menjadi 1 (sudah di skoring)
         DataAwal::where('id_pengusaha', $npwp)->update(['KD' => 1]);
 
-        return redirect(url('scoring/' . $npwp));
+        return redirect(url('scoring/komoditi/' . $npwp));
     }
 
-
-
-
-    public function store1(Request $request, $npwp)
-    {
-        // Perhitungan scoring
-        $avg_komo = array_sum($request->sk_komo) / count($request->sk_komo);
-        // $avg_pmsk = array_sum($request->sk_pmsk) / count($request->sk_pmsk);
-        $avg_pmsk = 4;
-        $sk_tons = 4;
-        $sk_cif = 4;
-        // $skor = $avg_komo + $avg_pmsk + $request->sk_tons + $request->sk_cif;
-        $skor = $avg_komo + $avg_pmsk + $sk_tons + $sk_cif;
-        $skor_akm = $skor / 4;
-        if ($skor_akm < 5) {
-            $status  = "Layanan Merah";
-        } elseif ($skor_akm >= 5 and $skor_akm < 7.5) {
-            $status  = "Layanan kuning";
-        } else {
-            $status = "Layanan Hijau";
-        }
-
-        // Input data hasil perhitungan pada tabel gudang berikat
-        GudangBerikat::create([
-            'npwp_pengusaha' => $npwp,
-            'nama_pengusaha' => DataAwal::where('id_pengusaha', $npwp)->value('NAMA_PENGUSAHA'),
-            'komoditi' => $avg_komo,
-            'pemasok' => $avg_pmsk,
-            'tonase' => $sk_tons,
-            'cif' => $sk_cif,
-            'skors' => $skor_akm,
-            'status' => $status
-        ]);
-
-        $array_no = 0;
-        // Input data skoring komoditi pada tabel komoditi
-        foreach ($request->sk_komo as $komo) {
-            // Menentukan skor dan level dari skor
-            $skor = $request['sk_komo'][$array_no];
-            switch ($skor) {
-                case '1':
-                    $level = 'Prioritas';
-                    break;
-                case '2':
-                    $level = 'low';
-                    break;
-                case '3':
-                    $level = 'medium';
-                    break;
-                case '4':
-                    $level = 'high';
-                    break;
-                case '5':
-                    $level = 'very high';
-                    break;
-            }
-            Komoditi::create([
-                'npwp_pengusaha' => $npwp,
-                'empat_digit_hs' => explode(" - ", $request['hs4_komo'][$array_no], 0),
-                'komoditi' => explode(" - ", $request['hs4_komo'][$array_no], 1),
-                'skor' => $skor,
-                'level' => $level,
-            ]);
-            $array_no++;
-        }
-
-        // Input data skoring pemasok pada tabel pemasok
-        foreach ($request->sk_pmsk as $pmsk) {
-            Pemasok::create([
-                'npwp' => $npwp,
-                'nama_pemasok' => $request['nm_pmsk'][$array_no],
-                'negara_asal' => $request['na_pmsk'][$array_no],
-                'score' => $pmsk[$array_no],
-            ]);
-            $array_no++;
-        }
-
-        //Update kolom KD pada tabel data awal menjadi 1 (sudah di skoring)
-        DataAwal::where('id_pengusaha', $npwp)->update(['KD' => 1]);
-    }
 
     public function update(Request $request, $npwp)
     {

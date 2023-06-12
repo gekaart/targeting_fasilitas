@@ -28,10 +28,14 @@ Route::get('/', function () {
 
 // Route menu scoring
 Route::get('/scoring', [ScoreController::class, 'index'])->middleware('auth');
-Route::get('/scoring/{npwp}', [ScoreController::class, 'show'])->middleware('auth');
-Route::post('/scoring/store/{npwp}', [ScoreController::class, 'store'])->middleware('auth');
+Route::get('/scoring/komoditi/{npwp}', [ScoreController::class, 'komoditi'])->middleware('auth');
+Route::get('/scoring/pemasok/{npwp}', [ScoreController::class, 'pemasok'])->middleware('auth');
+Route::get('/scoring/tonaseCIF/{npwp}', [ScoreController::class, 'tonaseCIF'])->middleware('auth');
+Route::post('/scoring/store_komoditi/{npwp}', [ScoreController::class, 'store_komoditi'])->middleware('auth');
 Route::put('/scoring/update/{npwp}', [ScoreController::class, 'update'])->middleware('auth');
 
 // Route menu gudang berikat
 Route::get('/gudang_berikat', [GudangBerikatController::class, 'index'])->middleware('auth');
-Route::get('/gudang_berikat/edit/{npwp}', [GudangBerikatController::class, 'edit'])->middleware('auth');
+Route::get('/gudang_berikat/komoditi/{npwp}', [ScoreController::class, 'komoditi'])->middleware('auth');
+Route::get('/gudang_berikat/pemasok/{npwp}', [ScoreController::class, 'pemasok'])->middleware('auth');
+Route::get('/gudang_berikat/tonaseCIF/{npwp}', [ScoreController::class, 'tonaseCIF'])->middleware('auth');
