@@ -29,7 +29,7 @@
                                     <td>{{ $perusahaan->ALAMAT_PENGUSAHA }}</td>
                                     <td>{{ $perusahaan->NAMA_KANTOR }}</td>
                                     <td>
-                                        <a href="{{ url('scoring/komoditi/'.$perusahaan->ID_PENGUSAHA) }}" title="scoring"><i class="align-middle text-primary" data-feather="clipboard"></i></a>
+                                        <a href="{{ url('scoring/komoditi/'.encrypt($perusahaan->ID_PENGUSAHA)) }}" title="scoring"><i class="align-middle text-primary" data-feather="clipboard"></i></a>
                                     </td>
                                 </tr>
                                 @php

@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pemasok', function (Blueprint $table) {
+        Schema::create('tonaseCIF', function (Blueprint $table) {
             $table->id();
+            $table->string('npwp_pengusaha');
+            $table->string('nama_pengusaha');
+            $table->string('hs_code');
+            $table->string('skor');
+            $table->string('level');
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pemasok');
+        Schema::dropIfExists('tonaseCIF');
     }
 };

@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('komoditi', function (Blueprint $table) {
+        Schema::create('pemasok', function (Blueprint $table) {
             $table->id();
             $table->string('npwp_pengusaha');
             $table->string('nama_pengusaha');
-            $table->string('empat_digit_hs');
-            $table->string('komoditi');
+            $table->string('pemasok');
+            $table->string('negara_asal');
             $table->string('skor');
             $table->string('level');
             $table->timestamps();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('komoditi');
+        Schema::dropIfExists('pemasok');
     }
 };

@@ -29,11 +29,26 @@
                                 <th>Kantor Pelayanan</th>
                                 <td>{{ $pengusaha['NAMA_KANTOR'] }}</td>
                             </tr>
-                            {{-- @dd($status_gb) --}}
                             @if ($scoring == 'yes')
+                                @php
+                                    switch ($status_gb[0]) {
+                                        case 'Prioritas':
+                                            $text = 'text-primary';
+                                            break;
+                                        case 'Low':
+                                            $text = 'text-success';
+                                            break;
+                                        case 'Medium':
+                                            $text = 'text-warning';
+                                            break;
+                                        default:
+                                            $text = 'text-danger';
+                                            break;
+                                    }
+                                @endphp
                                 <tr>
                                     <th>Status Layanan </th>
-                                    <td>{{ $status_gb[0] }}</td>
+                                    <td><h1 class="{{ $text }}">{{ $status_gb[0] }}</h1></td>
                                 </tr>
                             @endif
                         </table>

@@ -19,21 +19,14 @@ class GudangBerikatController extends Controller
         return view('gudang_berikat', $data);
     }
 
-    public function edit_komoditi($npwp)
+    public function detail($npwp)
     {
-        $data_awal = DataAwal::where('id_pengusaha', $npwp)->get();
+        $npwp = decrypt($npwp);
         $data = [
-            'content' => 'Skoring Penerima Fasilitas',
-            'scoring' => 'yes',
-            'npwp' => $npwp,
-            'pengusaha' => $data_awal->first(),
-            'data_komoditi' => $data_awal->unique('HS_CODE'),
-            'select_hs4' => Komoditi::latest(),
-            'status_gb' => GudangBerikat::where('npwp_pengusaha', $npwp)->pluck('status'),
-            // 'data_pemasok' => DataAwal::where('id_pengusaha', $npwp)->get()->unique('NAMA_PEMASOK'),
-            // 'tonase' => DataAwal::where('id_pengusaha', $npwp)->sum('netto'),
-            // 'cif' => DataAwal::where('id_pengusaha', $npwp)->sum('cif')
+            'content' => 'Detail Gudang Berikat',
+            'gudang_berikat' => GudangBerikat::where('npwp_pengusaha', $npwp)->get(),
+            'data_awal' => DataAwal::all()->where('ID_PENGUSAHA', $npwp),
         ];
-        return view('scoring/komoditi', $data);
+        return view('gudang_berikat', $data);
     }
 }

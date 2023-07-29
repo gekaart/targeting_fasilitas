@@ -63,6 +63,24 @@
                                             $lv_pmsk = 'Very High';
                                             break;
                                     }
+                                    // Menentukan level tonaseCIF
+                                    switch ($gb->tonase) {
+                                        case '1':
+                                            $lv_tncif = 'Prioritas';
+                                            break;
+                                        case '2':
+                                            $lv_tncif = 'Low';
+                                            break;
+                                        case '3':
+                                            $lv_tncif = 'Medium';
+                                            break;
+                                        case '4':
+                                            $lv_tncif = 'High';
+                                            break;
+                                        case '5':
+                                            $lv_tncif = 'Very High';
+                                            break;
+                                    }
 
                                 @endphp   
                                 {{-- Menentukan level komoditi --}}
@@ -74,11 +92,12 @@
                                         <td>
                                             Komoditi :({{ $gb->komoditi }}) {{ $lv_komo }}<br>
                                             Pemasok :({{ $gb->pemasok }}) {{ $lv_pmsk }}<br>
+                                            Tonase-CIF :({{ $gb->tonase }}) {{ $lv_tncif }}<br>
                                         </td>
                                         <td>{{ $gb->status }}</td>
                                         <td>
-                                            <a href="{{ url('gudang_berikat/detail/'.$gb->npwp_pengusaha) }}" title="detail"><i class="align-middle text-primary" data-feather="search"></i></a>
-                                            <a href="{{ url('gudang_berikat/komoditi/'.$gb->npwp_pengusaha) }}" title="edit"><i class="align-middle text-warning" data-feather="edit"></i></a>
+                                            <a href="{{ url('gudang_berikat/detail/'.encrypt($gb->npwp_pengusaha)) }}" title="detail"><i class="align-middle text-primary" data-feather="search"></i></a>
+                                            <a href="{{ url('gudang_berikat/komoditi/'.encrypt($gb->npwp_pengusaha)) }}" title="edit"><i class="align-middle text-warning" data-feather="edit"></i></a>
                                         </td>
                                     </tr>
                                     @php
@@ -92,6 +111,10 @@
                 </div>
             </div>
         </div>
+            @break
+        @case('Detail Gudang Berikat')
+            @dump($gudang_berikat)
+            @dump($data_awal)
             @break
         @case(2)
             
